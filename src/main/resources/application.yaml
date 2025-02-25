@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: sp-lk
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spdb
+    driverClassName: org.postgresql.Driver
+    username: postgres
