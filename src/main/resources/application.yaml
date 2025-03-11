@@ -9,3 +9,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/spdb
     driverClassName: org.postgresql.Driver
     username: postgres
+server:
+  error:
+    include-message: always
