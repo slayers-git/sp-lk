@@ -1,19 +1,26 @@
 package ru.bgpu.splk.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id @GeneratedValue
     private Long id;
 
     private String name;
     private String surname;
+    private String login;
+    private String password;
+
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private List<Group> groups;
 
     public User() {
     }
@@ -45,5 +52,20 @@ public class User {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return groups;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
     }
 }

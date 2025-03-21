@@ -2,6 +2,7 @@ package ru.bgpu.splk.repositories;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import ru.bgpu.splk.models.User;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Query(value = "select * from users where name = ?1", nativeQuery = true)
     public Optional<User> findOneByNameSQL(String name);
+
+    User findOneByLogin(String login);
 }
