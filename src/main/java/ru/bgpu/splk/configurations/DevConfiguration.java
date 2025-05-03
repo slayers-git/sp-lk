@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import ru.bgpu.splk.models.User;
 import ru.bgpu.splk.services.UserService;
 
@@ -29,6 +32,13 @@ public class DevConfiguration {
                         surnames[random.nextInt(surnames.length)]
                 ));
             }
+
+            User admin = new User();
+            admin.setLogin("admin");
+            PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+            admin.setPassword(encoder.encode("admin"));
+
+            userService.save(admin);
         };
     }
 }

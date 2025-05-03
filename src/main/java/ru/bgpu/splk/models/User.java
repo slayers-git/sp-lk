@@ -68,4 +68,12 @@ public class User implements UserDetails {
     public String getUsername() {
         return login;
     }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
