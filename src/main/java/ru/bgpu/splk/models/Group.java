@@ -1,13 +1,13 @@
 package ru.bgpu.splk.models;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "groups")
-public class Group implements GrantedAuthority {
+public class Group {
 
     @Id
     @GeneratedValue
@@ -15,8 +15,8 @@ public class Group implements GrantedAuthority {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<User> users;
+    @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER)
+    private List<User> users = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -40,10 +40,5 @@ public class Group implements GrantedAuthority {
 
     public void setUsers(List<User> users) {
         this.users = users;
-    }
-
-    @Override
-    public String getAuthority() {
-        return name;
     }
 }

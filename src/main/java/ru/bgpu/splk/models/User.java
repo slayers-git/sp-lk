@@ -1,15 +1,15 @@
 package ru.bgpu.splk.models;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import ru.bgpu.splk.dto.login.LoginUserDto;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User {
 
     @Id @GeneratedValue
     private Long id;
@@ -19,8 +19,8 @@ public class User implements UserDetails {
     private String login;
     private String password;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
-    private List<Group> groups;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Group> groups = new ArrayList<>();
 
     public User() {
     }
@@ -54,18 +54,7 @@ public class User implements UserDetails {
         this.surname = surname;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return groups;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
+    public String getLogin() {
         return login;
     }
 
@@ -73,7 +62,25 @@ public class User implements UserDetails {
         this.login = login;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
+
+    public LoginUserDto toLoginUserDto(){
+        LoginUserDto userDto = new LoginUserDto(id, name, surname, login);
+        userDto.setGroups(groups.stream().map(Group::getName).collect(Collectors.toList()));
+        return userDto;
     }
 }

@@ -7,10 +7,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import ru.bgpu.splk.models.Group;
 import ru.bgpu.splk.models.User;
+import ru.bgpu.splk.services.GroupService;
 import ru.bgpu.splk.services.UserService;
 
+import java.util.Collections;
 import java.util.Random;
 
 
@@ -18,6 +20,7 @@ import java.util.Random;
 public class DevConfiguration {
 
     @Autowired private UserService userService;
+    @Autowired private GroupService groupService;
 
     private String[] names ={"John", "Alex", "Stepan", "Anton", "Ivan"};
     private String[] surnames ={"Johnson", "Alexson", "Stepson"};
@@ -33,8 +36,13 @@ public class DevConfiguration {
                 ));
             }
 
+            Group adminGroup = new Group();
+            adminGroup.setName("ADMIN");
+            groupService.save(adminGroup);
+
             User admin = new User();
             admin.setLogin("admin");
+            admin.setGroups(Collections.singletonList(adminGroup));
             PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
             admin.setPassword(encoder.encode("admin"));
 
