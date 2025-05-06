@@ -13,23 +13,23 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-enum RequestStatus {
-	CREATED,
-	IN_PROGRESS,
-	READY,
-	CANCELLED,
-	DONE
-}
-
-enum RepairCategory {
-	LAPTOP,
-	TV,
-	PC
-};
-
 @Entity
 @Table(name = "requests")
 public class RepairRequest {
+	public enum Status {
+		CREATED,
+		IN_PROGRESS,
+		READY,
+		CANCELLED,
+		DONE
+	}
+
+	public enum Category {
+		LAPTOP,
+		TV,
+		PC
+	}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,12 +38,38 @@ public class RepairRequest {
     @JoinColumn(name = "user_id")
     private User user;
     
-    BigDecimal cost;
-    LocalDate submissionDate;
+    private BigDecimal cost;
+    private LocalDate submissionDate;
 
     @Enumerated(EnumType.STRING)
-    private RequestStatus status;
+    private Status status;
 
     @Enumerated(EnumType.STRING)
-    private RepairCategory category;
+    private Category category;
+    
+    RepairRequest () { }
+    
+    RepairRequest (User user, Category category, BigDecimal cost) {
+    	this.user = user;
+    	this.category = category;
+    	this.cost = cost;
+    	this.status = Status.CREATED;
+    	this.submissionDate = LocalDate.now ();
+    }
+
+	public BigDecimal getCost() {
+		return cost;
+	}
+
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
+	}
+
+	public LocalDate getSubmissionDate() {
+		return submissionDate;
+	}
+
+	public void setSubmissionDate(LocalDate submissionDate) {
+		this.submissionDate = submissionDate;
+	}
 }
